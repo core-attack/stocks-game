@@ -231,6 +231,9 @@
   left: 55% !important;
 }
 
+.s8 .maximize .wrapper{
+  left: 40% !important;
+}
 
 /* .maximize .wrapper.i1 {
   top: 10% !important;
@@ -365,13 +368,7 @@
   display: flex;
   align-items: center;
   text-align: center;
-
-  /* дип грин */
-
   color: #24281F;
-
-  /* Inside Auto Layout */
-
   flex: none;
   order: 0;
   align-self: center;

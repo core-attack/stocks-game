@@ -77,6 +77,8 @@ body{
   background: url("/img/pattern.png");
   background-repeat: repeat-x;
   z-index: -99999;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
 .e-sector{
