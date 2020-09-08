@@ -62,7 +62,7 @@ body{
   position: absolute;
   left: 0%;
   right: 0%;
-  top: 92vh;
+  top: 84vh;
   bottom: 0%;
 
   background: url("/img/currency-pattern.png");
@@ -82,7 +82,7 @@ body{
 }
 
 .e-sector{
-  flex-grow: 1; 
+  flex-grow: 1;
   width: 12%;
   flex-basis: 210px;
 
