@@ -1,28 +1,35 @@
 <template>
-  <div class="card" @click="toggle" :class="{ maximize: maximize, outdated: outdated }">
-    <div class="wrapper front card__side card__side--front" 
-      :class="{ c10: amount == 10000, c13: amount == 13000, c16: amount == 16000, c19: amount == 19000, c22: amount == 22000, c25: amount == 25000, 
-        i1: index == 0, i2: index == 1, i3: index == 2, i4: index == 3, i5: index == 4, i6: index == 5}">
-      <div class="rec"><span class="amount">{{formatAmount()}}</span>
-      <img :src="getFrontIcon()" alt="Карта"/></div>
-    </div>
-    <div class="wrapper back open card__side card__side--back"
-      :class="{ type_0: type == 0, type_1: type == 1, type_2: type == 2, type_3: type == 3, type_4: type == 4, type_5: type == 5, type_6: type == 6, type_7: type == 7, 
-        i1: index == 0, i2: index == 1, i3: index == 2, i4: index == 3, i5: index == 4, i6: index == 5
-      }">
-      <div class="rec">
+    <div class="card" @click="toggle" :class="{ maximize: maximize, outdated: outdated }">
+      
+      <div class="wrapper front card__side card__side--front" 
+        :class="{ c10: amount == 100, c13: amount == 200, c16: amount == 300, c19: amount == 400, c22: amount == 22000, c25: amount == 25000, 
+          i1: index == 0, i2: index == 1, i3: index == 2, i4: index == 3, i5: index == 4, i6: index == 5}">
+        <div class="rec"><span class="amount">{{formatAmount()}}</span>
+        <img :src="getFrontIcon()" alt="Карта"/></div>
       </div>
-      <div class="frame">
-        <div class="title"><span>{{getTitle()}}</span></div>
-        <img :src="getBackIcon()" alt="img with question"/>
+      <div class="wrapper back open card__side card__side--back"
+        :class="{ type_0: type == 0, type_1: type == 1, type_2: type == 2, type_3: type == 3, type_4: type == 4, type_5: type == 5, type_6: type == 6, type_7: type == 7, 
+          i1: index == 0, i2: index == 1, i3: index == 2, i4: index == 3, i5: index == 4, i6: index == 5
+        }">
+        <div class="rec">
+        </div>
+        <div class="frame">
+          <div v-if="type===0" class="text">
+            <h3>{{text}}</h3>
+            <ul>
+              <li v-for="(option, i) in options">{{option}}</li>
+            </ul>
+          </div>
+          <img v-if="type===1" class="child" :src="getImageChild()" alt="what is it?" width="150"/>
+          <div class="title" v-if="type===2 || type===3"><span>{{getTitle()}}</span></div>
+          <img v-if="type===2 || type===3" :src="getBackIcon()" alt="img with question" width="75"/>
+        </div>
       </div>
+      <div class="wrapper-fake"></div>
     </div>
-    <div class="wrapper-fake"></div>
-  </div>
 </template>
 
 <script>
-  import Vue from 'vue'
   const imgPath = "/img/";
 
   export default {
@@ -44,9 +51,17 @@
         type: String,
         default: "some text"
       },
+      imageChild: {
+        type: String,
+        default: "some text"
+      },
       type:{
         type: Number,
         default: 0
+      },
+      options:{
+        type: Array,
+        default: () => []
       },
       amount: {
         type: Number,
@@ -62,9 +77,10 @@
     },
 
     data: function() {
+
+      console.log(this.options)
       return {
         open: false,
-        closed: false,
         maximize: false,
         outdated: false
       }
@@ -79,51 +95,49 @@
         this.open = !this.open;
         this.maximize = !this.maximize;
         this.outdated = true;
-      },
-      hide: function(){
-        this.closed = true;
+
+        if (this.outdated && !this.maximize){
+          this.$emit('updated', this.amount)
+        }
       },
       getTitle(){
         switch(this.type){
-          case 0: return "ВНИМАНИЕ, ВОПРОС!";
-          case 1: return "СЧАСТЛИВЫЙ СЛУЧАЙ";
-          case 2: return "СЧАСТЛИВЫЙ СЛУЧАЙ";
-          case 3: return "КИДАЙ СВИНЬЮ";
-          case 4: return "БЛИЦ";
-          case 5: return "ПРАВДА / ДЕЙСТВИЕ";
-          case 6: return "РИСКУЙ!";
-          case 7: return "СЧАСТЛИВЫЙ СЛУЧАЙ";
+          case 2: return "Выбери ещё одного человека из команды";
+          case 3: return "It's Figma time!";
         }
 
         return "";
       },
       getBackIcon(){
         switch(this.type){
-          case 0: return imgPath + "emoji.svg";
-          case 1: return imgPath + "eye.svg";
+          case 2: return imgPath + "emoji.svg";
+          case 3: return imgPath + "eye.svg";
+          /*case 0: return imgPath + "emoji.svg";
           case 2: return imgPath + "money.svg";
           case 3: return imgPath + "pig.svg";
-          case 4: return imgPath + "question.svg";
           case 5: return imgPath + "question2.svg";
           case 6: return imgPath + "rating.svg";
-          case 7: return imgPath + "text.svg";
+          case 7: return imgPath + "text.svg";*/
         }
 
         return "";
       },
       getFrontIcon(){
         switch(this.amount){
-          case 10000: return imgPath + "background.png";
-          case 13000: return imgPath + "background-1.png";
-          case 16000: return imgPath + "background-2.png";
-          case 19000: return imgPath + "background-3.png";
-          case 22000: return imgPath + "background-4.png";
-          case 25000: return imgPath + "background-5.png";
+          case 100: return imgPath + "background.png";
+          case 200: return imgPath + "background-1.png";
+          case 300: return imgPath + "background-2.png";
+          case 400: return imgPath + "background-3.png";
+          case 500: return imgPath + "background-4.png";
+          case 600: return imgPath + "background-5.png";
         }
       },
       formatAmount(){
         return this.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
       },
+      getImageChild(){
+        return imgPath + this.imageChild;
+      }
     },
   }
 </script>
@@ -136,6 +150,17 @@
   -moz-perspective: 200rem;
   perspective: 200rem;
   margin: 0 1rem;
+}
+
+:not(.maximize).outdated .card__side--back{
+  top: 9999px;
+  transition: all 3s ease;
+  z-index: 1200;
+
+}
+
+.card:not(.maximize).outdated{
+  z-index: 1200;
 }
 
 .card > .wrapper, .card > .wrapper-fake, .card > .wrapper, .card > .wrapper-fake-2{
@@ -173,11 +198,6 @@
   display: block;
 }
 
-.card.outdated:not(.maximize) > *{
-  top: 0 !important;
-  opacity: 0.1;
-}
-
 .maximize{
   z-index: 1001;
   /* -webkit-transition: all 2s ease;  
@@ -191,7 +211,7 @@
   display: block;
 }
 
-.card__side--back{
+:not(.outdated) .card__side--back{
   transform: rotateY(-180deg);
 }
 
@@ -221,7 +241,6 @@
   transform: translate(-50%, -50%);
 }
 
-
 .maximize .wrapper {
   top: 50% !important;
   left: 50% !important;
@@ -234,10 +253,6 @@
 .s8 .maximize .wrapper{
   left: 40% !important;
 }
-
-/* .maximize .wrapper.i1 {
-  top: 10% !important;
-} */
 
 .card__side {
   height: 52rem;
@@ -295,7 +310,7 @@
 
 .card__side--front .amount{
   position: absolute;
-  left: 32.86%;
+  left: 40%;
   right: 32.86%;
   top: 35.31%;
   bottom: 39.23%;
@@ -325,7 +340,7 @@
 }
 
 .card__side--back{
-  z-index: 9999999;
+  z-index: 1100;
   background-size: 15% !important;
 }
 
@@ -383,8 +398,6 @@
 }
 
 .title {
-  /* position: static;
-  width: 162px; */
   height: 40px;
   left: calc(50% - 162px/2);
   top: 0px;
@@ -568,6 +581,20 @@
   order: 1;
   align-self: center;
   margin: 0px 5px;
+}
+
+.text h3{
+  margin: 0;
+  font-size: 15px;
+}
+
+.text ul{
+  margin: 5px;
+}
+
+.text li{
+  list-style-type: lower-alpha;
+  text-align: left;
 }
 
 </style>
